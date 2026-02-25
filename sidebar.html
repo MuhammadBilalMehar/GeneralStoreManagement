@@ -1,0 +1,110 @@
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-[#0F172A] text-slate-400 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 border-r border-slate-800 flex flex-col">
+    
+        <div class="h-20 px-6 flex items-center justify-between border-b border-slate-800/50">
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <div class="absolute -inset-1 bg-indigo-500 rounded-lg blur opacity-25"></div>
+                    <div class="relative bg-indigo-600 p-2 rounded-xl shadow-lg">
+                        <i data-lucide="zap" class="text-white w-6 h-6 fill-current"></i>
+                    </div>
+                </div>
+                <div class="leading-tight">
+                    <span class="text-base font-bold text-white block tracking-tight">WaqasBilalEnterprise</span>
+                    <span class="text-[10px] text-indigo-400 font-black uppercase tracking-[0.1em]">Admin Terminal</span>
+                </div>
+            </div>
+            <button onclick="toggleSidebar()" class="md:hidden text-slate-500 hover:text-white transition-colors">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto custom-scrollbar">
+            
+            <p class="text-[11px] font-bold text-slate-600 uppercase px-3 pb-2 tracking-[0.15em]">Analytics</p>
+            
+            <a href="index.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-800/50 hover:text-slate-200 transition-all group">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                    <span class="font-semibold text-sm">Dashboard</span>
+                </div>
+                
+            </a>
+
+            
+
+            <div class="pt-4 pb-2">
+                <p class="text-[11px] font-bold text-slate-600 uppercase px-3 tracking-[0.15em]">Inventory</p>
+            </div>
+
+
+            <a href="products.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-800/50 hover:text-slate-200 transition-all group">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="box" class="w-5 h-5 text-slate-500 group-hover:text-emerald-400 transition-colors"></i>
+                    <span class="text-sm font-medium">Products</span>
+                </div>
+                
+            </a>
+
+            <a href="categories.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800/50 hover:text-slate-200 transition-all group">
+                <i data-lucide="shopping-bag" class="w-5 h-5 text-slate-500 group-hover:text-blue-400 transition-colors"></i>
+                <span class="text-sm font-medium">Cattegories</span>
+            </a>
+
+            <div class="pt-4 pb-2">
+                <p class="text-[11px] font-bold text-slate-600 uppercase px-3 tracking-[0.15em]">Logistics</p>
+            </div>
+
+            <a href="purchases.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800/50 hover:text-slate-200 transition-all group">
+                <i data-lucide="shopping-bag" class="w-5 h-5 text-slate-500 group-hover:text-blue-400 transition-colors"></i>
+                <span class="text-sm font-medium">Purchases</span>
+            </a>
+
+            <a href="suppliers.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800/50 hover:text-slate-200 transition-all group">
+                <i data-lucide="truck" class="w-5 h-5 text-slate-500 group-hover:text-amber-400 transition-colors"></i>
+                <span class="text-sm font-medium">Suppliers</span>
+            </a>
+
+            <div class="pt-4 pb-2">
+                <p class="text-[11px] font-bold text-slate-600 uppercase px-3 tracking-[0.15em]">Terminal</p>
+            </div>
+
+            <a href="sales.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800/50 hover:text-slate-200 transition-all group">
+                <i data-lucide="shopping-cart" class="w-5 h-5 text-slate-500 group-hover:text-indigo-400 transition-colors"></i>
+                <span class="text-sm font-medium">Daily Sale</span>
+            </a>
+
+            <a href="customers.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800/50 hover:text-slate-200 transition-all group">
+                <i data-lucide="shopping-cart" class="w-5 h-5 text-slate-500 group-hover:text-indigo-400 transition-colors"></i>
+                <span class="text-sm font-medium">Customers</span>
+            </a>
+
+            <div class="pt-4 pb-2">
+                <p class="text-[11px] font-bold text-slate-600 uppercase px-3 tracking-[0.15em]">Treasury</p>
+            </div>
+
+            <a href="expenses.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800/50 hover:text-slate-200 transition-all group">
+                <i data-lucide="wallet" class="w-5 h-5 text-slate-500 group-hover:text-rose-400 transition-colors"></i>
+                <span class="text-sm font-medium">Expenses</span>
+            </a>
+
+            <a href="reports.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800/50 hover:text-slate-200 transition-all group">
+                <i data-lucide="pie-chart" class="w-5 h-5 text-slate-500 group-hover:text-indigo-400 transition-colors"></i>
+                <span class="text-sm font-medium">Monthly Reports</span>
+            </a>
+            
+        </nav>
+
+        <div class="p-4 border-t border-slate-800/50 bg-[#0B1222]">
+            <div class="flex items-center gap-3 p-2 rounded-2xl hover:bg-slate-800/50 transition-colors cursor-pointer group">
+                <div class="relative shrink-0">
+                    <img src="https://ui-avatars.com/api/?name=Waqas+Bilal&background=6366f1&color=fff" class="w-10 h-10 rounded-xl object-cover" alt="user">
+                    <div class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-[#0B1222] rounded-full"></div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-bold text-white truncate">Waqas Bilal</p>
+                    <p class="text-[10px] text-slate-500 font-medium uppercase tracking-wider">Owner Account</p>
+                </div>
+                <i data-lucide="more-vertical" class="w-4 h-4 text-slate-600 group-hover:text-slate-400"></i>
+            </div>
+        </div>
+    </aside>

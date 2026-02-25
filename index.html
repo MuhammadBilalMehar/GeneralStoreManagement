@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexStore | Waqas Bilal Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .sidebar-closed { transform: translateX(-100%); }
+        .stat-card:hover { transform: translateY(-4px); transition: all 0.3s ease; }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-[#F8FAFC] text-slate-900 overflow-hidden">
+
+<div class="flex h-screen overflow-hidden">
+
+    <div id="sidebar-container"></div>
+
+    <div class="flex-1 flex flex-col min-w-0">
+
+        <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 h-16 flex items-center justify-between px-8 shrink-0 z-40">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-lg bg-slate-100"><i data-lucide="menu" class="w-6 h-6"></i></button>
+                <div class="hidden sm:block">
+                    <h1 class="text-sm font-bold text-slate-400 uppercase tracking-widest">Primary Terminal</h1>
+                    <p class="text-xl font-black text-slate-800">Operational Overview</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <div class="relative hidden lg:block">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" placeholder="Quick find..." class="bg-slate-50 border border-slate-200 rounded-xl py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-indigo-500 w-64 outline-none">
+                </div>
+                <div class="flex items-center gap-3 pl-4 border-l">
+                    <img src="https://ui-avatars.com/api/?name=Waqas+Bilal&background=6366f1&color=fff" class="w-10 h-10 rounded-xl shadow-sm border-2 border-white" alt="profile">
+                </div>
+            </div>
+        </header>
+
+        <main class="p-8 overflow-y-auto custom-scrollbar">
+            
+            <div class="mb-4 flex items-center gap-2">
+                <i data-lucide="trending-up" class="w-5 h-5 text-indigo-600"></i>
+                <h2 class="font-bold text-slate-800">Performance Metrics</h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                
+                <div class="stat-card bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-indigo-50 p-3 rounded-2xl text-indigo-600"><i data-lucide="shopping-bag" class="w-6 h-6"></i></div>
+                        <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">RETAIL</span>
+                    </div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Monthly Retail Sale</p>
+                    <h3 class="text-2xl font-black text-slate-800 mt-1">Rs 120,200</h3>
+                </div>
+
+                <div class="stat-card bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-blue-50 p-3 rounded-2xl text-blue-600"><i data-lucide="users" class="w-6 h-6"></i></div>
+                        <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">WHOLESALE</span>
+                    </div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Monthly Wholesale</p>
+                    <h3 class="text-2xl font-black text-slate-800 mt-1">Rs 154,200</h3>
+                </div>
+
+                <div class="stat-card bg-indigo-600 p-6 rounded-3xl shadow-xl shadow-indigo-200">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-white/20 p-3 rounded-2xl text-white"><i data-lucide="zap" class="w-6 h-6"></i></div>
+                        <span class="text-[10px] font-bold text-indigo-200 uppercase">Net Income</span>
+                    </div>
+                    <p class="text-xs font-bold text-indigo-100 uppercase tracking-widest">Monthly Profit</p>
+                    <h3 class="text-2xl font-black text-white mt-1">Rs 42,000</h3>
+                </div>
+
+                <div class="stat-card bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-emerald-50 p-3 rounded-2xl text-emerald-600"><i data-lucide="bar-chart" class="w-6 h-6"></i></div>
+                        <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">VALUATION</span>
+                    </div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Total Inventory Assets</p>
+                    <h3 class="text-2xl font-black text-slate-800 mt-1">Rs 455,540</h3>
+                </div>
+
+            </div>
+
+            <div class="mb-4 flex items-center gap-2">
+                <i data-lucide="credit-card" class="w-5 h-5 text-red-500"></i>
+                <h2 class="font-bold text-slate-800">Financial Outflows</h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                <div class="stat-card bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Shop Expenses</p>
+                    <h3 class="text-xl font-bold text-red-600">Rs 24,500</h3>
+                    <div class="w-full bg-slate-100 h-1.5 rounded-full mt-4">
+                        <div class="bg-red-500 h-1.5 rounded-full" style="width: 45%"></div>
+                    </div>
+                </div>
+                <div class="stat-card bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Personal Expenses</p>
+                    <h3 class="text-xl font-bold text-amber-600">Rs 15,200</h3>
+                    <div class="w-full bg-slate-100 h-1.5 rounded-full mt-4">
+                        <div class="bg-amber-500 h-1.5 rounded-full" style="width: 30%"></div>
+                    </div>
+                </div>
+                <div class="stat-card bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Monthly Purchase</p>
+                    <h3 class="text-xl font-bold text-slate-800">Rs 154,200</h3>
+                    <p class="text-[10px] text-slate-400 mt-3 font-bold">12 Suppliers invoiced</p>
+                </div>
+                <div class="stat-card bg-slate-900 p-6 rounded-3xl shadow-sm">
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Stock SKU's</p>
+                    <h3 class="text-xl font-bold text-white">245 Products</h3>
+                    <p class="text-[10px] text-red-400 mt-3 font-bold">08 Low stock alerts</p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<!-- <script>
+
+    fetch('sidebar.html')
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+        // Important: Re-run Lucide icons after loading the sidebar
+        lucide.createIcons(); 
+    });
+
+    lucide.createIcons();
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('sidebar-closed');
+    }
+</script> -->
+
+<script src="main.js"></script>
+</body>
+</html>

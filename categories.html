@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories | NexStore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-[Inter]">
+
+<div class="flex h-screen overflow-hidden">
+    
+    <div id="sidebar-container"></div>
+
+    <div class="flex-1 flex flex-col overflow-hidden bg-[#F8FAFC]">
+    <header class="bg-white border-b h-20 flex items-center justify-between px-8 shrink-0">
+        <div>
+            <h1 class="text-xl font-black text-slate-800 tracking-tight uppercase ">Department Management</h1>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Categorize your Inventory Asset</p>
+        </div>
+        <button onclick="toggleModal('categoryModal')" class="bg-indigo-600 hover:bg-black text-white px-6 py-3 rounded-2xl font-black text-sm shadow-xl shadow-indigo-100 flex items-center gap-2 transition-all active:scale-95">
+            <i data-lucide="plus-circle" class="w-5 h-5"></i> CREATE NEW CATEGORY
+        </button>
+    </header>
+
+    <div class="px-8 pt-6 grid grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center gap-4">
+            <div class="bg-indigo-50 p-3 rounded-xl text-indigo-600"><i data-lucide="layers" class="w-5 h-5"></i></div>
+            <div><p class="text-[10px] font-bold text-slate-400 uppercase">Total Categories</p><p class="text-lg font-black text-slate-800">12</p></div>
+        </div>
+        </div>
+
+    <main class="p-8 overflow-y-auto flex-1 custom-scrollbar">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            
+            <div class="bg-white p-6 rounded-[2.5rem] border border-slate-200 shadow-sm hover:border-indigo-500 hover:shadow-xl hover:shadow-indigo-50/50 transition-all group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-orange-500/5 rounded-full -mr-8 -mt-8"></div>
+                
+                <div class="flex justify-between items-start mb-6 relative z-10">
+                    <div class="bg-orange-100 p-4 rounded-2xl text-orange-600 shadow-inner">
+                        <i data-lucide="apple" class="w-8 h-8"></i>
+                    </div>
+                    <div class="flex gap-1">
+                        <button onclick="toggleModal('categoryModal')" class="p-2 text-slate-300 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                        <button class="p-2 text-slate-300 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+                
+                <h3 class="text-xl font-black text-slate-800 tracking-tight">Fresh Produce</h3>
+                <p class="text-slate-500 text-xs font-medium mt-1 leading-relaxed">Fruits, Vegetables & Farm Herbs</p>
+                
+                <div class="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Stock Count</p>
+                        <span class="text-sm font-black text-slate-700">42 Products</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-[2.5rem] border border-slate-200 shadow-sm hover:border-indigo-500 hover:shadow-xl transition-all group relative overflow-hidden">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="bg-blue-100 p-4 rounded-2xl text-blue-600 shadow-inner">
+                        <i data-lucide="milk" class="w-8 h-8"></i>
+                    </div>
+                    <div class="flex gap-1">
+                        <button onclick="toggleModal('categoryModal')" class="p-2 text-slate-300 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                        <button class="p-2 text-slate-300 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+                <h3 class="text-xl font-black text-slate-800 tracking-tight">Dairy & Eggs</h3>
+                <p class="text-slate-500 text-xs font-medium mt-1 leading-relaxed">Milk, Cheese, Butter & Poultry</p>
+                <div class="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between">
+                    <div><p class="text-[10px] font-black text-slate-400 uppercase mb-1">Stock Count</p><span class="text-sm font-black text-slate-700">18 Products</span></div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<div id="categoryModal" class="fixed inset-0 z-[100] hidden items-center flex justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div class="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300 border border-slate-200">
+        <div class="p-6 border-b flex justify-between items-center bg-slate-50/50">
+            <div>
+                <h3 class="text-lg font-black text-slate-800">Add New Department</h3>
+                <p class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Organize your master list</p>
+            </div>
+            <button onclick="toggleModal('categoryModal')" class="text-slate-400 hover:text-rose-500 transition-colors"><i data-lucide="x" class="w-6 h-6"></i></button>
+        </div>
+        
+        <form class="p-8 space-y-5">
+            <div>
+                <label class="block text-[10px] font-black text-slate-400 uppercase mb-2 ml-1">Category Name</label>
+                <input type="text" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-sm font-bold focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="e.g. Beverages">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black text-slate-400 uppercase mb-2 ml-1">Short Description</label>
+                <textarea rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-sm font-medium outline-none" placeholder="What's included in this group?"></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-2 ml-1">Icon Selection</label>
+                    <select class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 text-xs font-bold outline-none">
+                        <option>Shopping Bag</option>
+                        <option>Coffee</option>
+                        <option>Refrigerator</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-2 ml-1">Theme Color</label>
+                    <div class="flex items-center gap-2 pt-2">
+                        <button type="button" class="w-6 h-6 rounded-full bg-indigo-500 ring-2 ring-offset-2 ring-indigo-500"></button>
+                        <button type="button" class="w-6 h-6 rounded-full bg-rose-500"></button>
+                        <button type="button" class="w-6 h-6 rounded-full bg-emerald-500"></button>
+                        <button type="button" class="w-6 h-6 rounded-full bg-amber-500"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4 flex gap-3">
+                <button type="button" onclick="toggleModal('categoryModal')" class="flex-1 py-4 text-slate-400 font-bold text-xs uppercase tracking-widest hover:text-slate-600 transition-all">Cancel</button>
+                <button type="submit" class="flex-[2] bg-indigo-600 hover:bg-black text-white py-4 rounded-2xl font-black text-sm shadow-xl shadow-indigo-100 transition-all active:scale-95">
+                    SAVE CATEGORY
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="main.js"></script>
+
+</body>
+</html>
