@@ -8,6 +8,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        /* Keep your existing styles here */
+
+        #sidebar {
+            /* This fixes the mobile blur/fuzziness */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transform: translateZ(0); 
+            backface-visibility: hidden;
+            background-color: #0F172A !important; /* Ensures the background is solid */
+        }
+        
+
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .sidebar-closed { transform: translateX(-100%); }
         .stat-card:hover { transform: translateY(-4px); transition: all 0.3s ease; }
