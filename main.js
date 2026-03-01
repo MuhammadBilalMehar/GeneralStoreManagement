@@ -119,20 +119,119 @@
 // };
 
 
+// let touchStartX = 0;
+// let touchEndX = 0;
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     loadSidebar();
+
+//     // Touch Listeners
+//     document.addEventListener('touchstart', e => {
+//         touchStartX = e.changedTouches[0].screenX;
+//     }, { passive: true });
+
+//     document.addEventListener('touchend', e => {
+//         touchEndX = e.changedTouches[0].screenX;
+//         handleSwipe();
+//     }, { passive: true });
+// });
+
+// async function loadSidebar() {
+//     const container = document.getElementById('sidebar-container');
+//     if (!container) return;
+//     try {
+//         const response = await fetch('sidebar.html');
+//         container.innerHTML = await response.text();
+//         if (window.lucide) lucide.createIcons();
+//     } catch (err) { console.error(err); }
+// }
+
+// // THE MASTER TOGGLE
+// function toggleSidebar() {
+//     const sidebar = document.getElementById('sidebar');
+//     const overlay = document.getElementById('sidebarOverlay');
+//     const icon = document.querySelector('.mobile-menu-btn i');
+
+//     if (!sidebar) return;
+
+//     // Toggle the 'open' class
+//     const isOpen = sidebar.classList.toggle('open');
+
+//     // Handle Overlay and Icon
+//     if (overlay) {
+//         if (isOpen) {
+//             overlay.classList.remove('hidden');
+//             setTimeout(() => overlay.classList.add('active'), 10);
+//             if (icon) icon.setAttribute('data-lucide', 'x');
+//         } else {
+//             overlay.classList.remove('active');
+//             setTimeout(() => overlay.classList.add('hidden'), 300);
+//             if (icon) icon.setAttribute('data-lucide', 'menu');
+//         }
+//     }
+//     if (window.lucide) lucide.createIcons();
+// }
+
+// // SWIPE LOGIC
+// function handleSwipe() {
+//     const sidebar = document.getElementById('sidebar');
+//     if (!sidebar) return;
+    
+//     const isOpen = sidebar.classList.contains('open');
+//     const distance = touchStartX - touchEndX;
+
+//     // Swipe left to close
+//     if (isOpen && distance > 70) {
+//         toggleSidebar();
+//     }
+//     // Swipe right from edge to open
+//     if (!isOpen && distance < -70 && touchStartX < 40) {
+//         toggleSidebar();
+//     }
+// }
+
+// // Global click to close
+// window.onclick = (e) => {
+//     if (e.target.id === 'sidebarOverlay') toggleSidebar();
+// };
+
+/**
+ * NexStore Admin Terminal - Mobile Chrome Optimized
+ */
+
 let touchStartX = 0;
-let touchEndX = 0;
+let touchStartY = 0;
+let isSwiping = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     loadSidebar();
 
-    // Touch Listeners
+    // 1. CAPTURE START
     document.addEventListener('touchstart', e => {
         touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+        isSwiping = true;
+    }, { passive: false }); // Set to false so we can preventDefault if needed
+
+    // 2. MONITOR MOVEMENT (Crucial for Chrome Mobile)
+    document.addEventListener('touchmove', e => {
+        if (!isSwiping) return;
+        
+        const currentX = e.changedTouches[0].screenX;
+        const deltaX = touchStartX - currentX;
+        
+        // If swiping horizontally, stop Chrome from navigating "Back" or "Forward"
+        if (Math.abs(deltaX) > 10) {
+            // e.preventDefault(); // Uncomment this if the page "wiggles" while swiping
+        }
     }, { passive: true });
 
+    // 3. HANDLE END
     document.addEventListener('touchend', e => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
+        const touchEndX = e.changedTouches[0].screenX;
+        const touchEndY = e.changedTouches[0].screenY;
+        isSwiping = false;
+        handleSwipe(touchEndX, touchEndY);
     }, { passive: true });
 });
 
@@ -143,10 +242,10 @@ async function loadSidebar() {
         const response = await fetch('sidebar.html');
         container.innerHTML = await response.text();
         if (window.lucide) lucide.createIcons();
+        setActiveNavLink();
     } catch (err) { console.error(err); }
 }
 
-// THE MASTER TOGGLE
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebarOverlay');
@@ -154,17 +253,17 @@ function toggleSidebar() {
 
     if (!sidebar) return;
 
-    // Toggle the 'open' class
+    // Toggle using a standard class
     const isOpen = sidebar.classList.toggle('open');
 
-    // Handle Overlay and Icon
     if (overlay) {
         if (isOpen) {
             overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.add('active'), 10);
+            // Use a small timeout for the opacity transition to trigger
+            setTimeout(() => overlay.classList.add('opacity-100'), 10);
             if (icon) icon.setAttribute('data-lucide', 'x');
         } else {
-            overlay.classList.remove('active');
+            overlay.classList.remove('opacity-100');
             setTimeout(() => overlay.classList.add('hidden'), 300);
             if (icon) icon.setAttribute('data-lucide', 'menu');
         }
@@ -172,25 +271,35 @@ function toggleSidebar() {
     if (window.lucide) lucide.createIcons();
 }
 
-// SWIPE LOGIC
-function handleSwipe() {
+function handleSwipe(endX, endY) {
     const sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
     
     const isOpen = sidebar.classList.contains('open');
-    const distance = touchStartX - touchEndX;
+    const deltaX = touchStartX - endX;
+    const deltaY = Math.abs(touchStartY - endY);
 
-    // Swipe left to close
-    if (isOpen && distance > 70) {
+    // Swipe left to close (ensure it's more horizontal than vertical)
+    if (isOpen && deltaX > 80 && deltaX > deltaY) {
         toggleSidebar();
     }
-    // Swipe right from edge to open
-    if (!isOpen && distance < -70 && touchStartX < 40) {
+    
+    // Swipe right from edge (within 50px of screen start) to open
+    if (!isOpen && deltaX < -80 && touchStartX < 50 && Math.abs(deltaX) > deltaY) {
         toggleSidebar();
     }
 }
 
-// Global click to close
+function setActiveNavLink() {
+    const currentPath = window.location.pathname.split("/").pop() || 'index.html';
+    document.querySelectorAll('#sidebar nav a').forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('bg-indigo-600/10', 'text-indigo-400', 'border', 'border-indigo-500/20');
+        }
+    });
+}
+
+// Ensure overlay click always works
 window.onclick = (e) => {
     if (e.target.id === 'sidebarOverlay') toggleSidebar();
 };

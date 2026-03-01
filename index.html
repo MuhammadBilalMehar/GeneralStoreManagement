@@ -2,37 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WB Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Force high-quality rendering */
-        #sidebar {
-            -webkit-font-smoothing: antialiased;
-            transform: translateX(-100%); /* Default hidden */
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Force high-quality rendering */
+            #sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
             z-index: 100;
-            touch-action: pan-y; /* Allows scrolling but captures swipes */
+            width: 16rem; /* 64 in tailwind */
+            background-color: #0F172A;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-out;
+            /* This prevents Chrome from trying to scroll the page while you swipe the menu */
+            touch-action: pan-y; 
         }
 
-        /* Desktop override */
+        #sidebar.open {
+            transform: translateX(0);
+        }
+
+        /* Desktop View: Force Sidebar visible */
         @media (min-width: 768px) {
             #sidebar {
-                transform: translateX(0) !important;
-                position: relative !important;
+                position: relative;
+                transform: translateX(0);
+                touch-action: auto;
             }
         }
-
-        /* The class our JS will toggle */
-        #sidebar.open {
-            transform: translateX(0) !important;
-        }
         
-        #sidebarOverlay.active {
-            display: block !important;
-            opacity: 1 !important;
+        #sidebarOverlay {
+            transition: opacity 0.3s ease;
         }
 
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
