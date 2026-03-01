@@ -32,13 +32,13 @@
 
 <div class="flex h-screen overflow-hidden">
 
-        <button onclick="toggleSidebar()" class="md:hidden fixed top-3 left-4 z-[60] bg-[#0F172A] border border-slate-800 text-white p-2 rounded-xl">
-            <i data-lucide="menu" class="w-6 h-6"></i>
-        </button>
+        <button onclick="toggleSidebar()" class="mobile-menu-btn md:hidden fixed top-3 left-4 z-[70] bg-[#0F172A] border border-slate-800 text-white p-2 rounded-xl shadow-xl">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+    </button>
 
-        <div id="sidebar-container"></div>
+    <div id="sidebar-container"></div>
 
-        <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden md:hidden transition-opacity duration-300 opacity-0"></div>
+    <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[45] hidden transition-opacity duration-300 opacity-0"></div>
 
     <!-- <div id="sidebar-container"></div> -->
 
@@ -145,23 +145,6 @@
         </main>
     </div>
 </div>
-
-<!-- <script>
-
-    fetch('sidebar.html')
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById('sidebar-container').innerHTML = data;
-        // Important: Re-run Lucide icons after loading the sidebar
-        lucide.createIcons(); 
-    });
-
-    lucide.createIcons();
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('sidebar-closed');
-    }
-</script> -->
 
 <script src="main.js"></script>
 </body>
