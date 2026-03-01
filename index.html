@@ -8,23 +8,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        
+        /* Force high-quality rendering */
         #sidebar {
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            transform: translateZ(0); 
-            backface-visibility: hidden;
-            background-color: #0F172A !important;
-            /* CRITICAL: Allows vertical scroll but lets JS handle horizontal swipe */
-            touch-action: pan-y; 
+            transform: translateX(-100%); /* Default hidden */
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+            touch-action: pan-y; /* Allows scrolling but captures swipes */
         }
 
-        .stat-card:hover { transform: translateY(-4px); transition: all 0.3s ease; }
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        /* Desktop override */
+        @media (min-width: 768px) {
+            #sidebar {
+                transform: translateX(0) !important;
+                position: relative !important;
+            }
+        }
+
+        /* The class our JS will toggle */
+        #sidebar.open {
+            transform: translateX(0) !important;
+        }
         
+        #sidebarOverlay.active {
+            display: block !important;
+            opacity: 1 !important;
+        }
 
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .sidebar-closed { transform: translateX(-100%); }
