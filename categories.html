@@ -7,80 +7,125 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+
+        /* --- DESKTOP VS MOBILE LAYOUT --- */
+        #sidebar {
+            z-index: 100;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        #sidebar.open {
+            transform: translateX(0) !important;
+        }
+
+        @media (min-width: 768px) {
+            #sidebar {
+                transform: translateX(0) !important;
+                position: fixed;
+            }
+            /* Push the content to the right so sidebar doesn't cover it */
+            .main-content-area {
+                margin-left: 16rem; 
+                width: calc(100% - 16rem);
+            }
+            .mobile-menu-btn { display: none !important; }
+        }
+
+        /* Custom Scrollbar for the grid */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-[Inter]">
+<body class="bg-slate-50 text-slate-900 overflow-x-hidden">
 
 <div class="flex h-screen overflow-hidden">
     
+    <button onclick="toggleSidebar()" class="mobile-menu-btn md:hidden fixed top-4 left-4 z-[70] bg-[#0F172A] text-white p-2.5 rounded-xl shadow-xl border border-slate-700">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+    </button>
+
     <div id="sidebar-container"></div>
 
-    <div class="flex-1 flex flex-col overflow-hidden bg-[#F8FAFC]">
-    <header class="bg-white border-b h-20 flex items-center justify-between px-8 shrink-0">
-        <div>
-            <h1 class="text-xl font-black text-slate-800 tracking-tight uppercase ">Department Management</h1>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Categorize your Inventory Asset</p>
-        </div>
-        <button onclick="toggleModal('categoryModal')" class="bg-indigo-600 hover:bg-black text-white px-6 py-3 rounded-2xl font-black text-sm shadow-xl shadow-indigo-100 flex items-center gap-2 transition-all active:scale-95">
-            <i data-lucide="plus-circle" class="w-5 h-5"></i> CREATE NEW CATEGORY
-        </button>
-    </header>
+    <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[45] hidden transition-opacity duration-300 opacity-0"></div>
 
-    <div class="px-8 pt-6 grid grid-cols-4 gap-4">
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center gap-4">
-            <div class="bg-indigo-50 p-3 rounded-xl text-indigo-600"><i data-lucide="layers" class="w-5 h-5"></i></div>
-            <div><p class="text-[10px] font-bold text-slate-400 uppercase">Total Categories</p><p class="text-lg font-black text-slate-800">12</p></div>
-        </div>
-        </div>
+    <div class="main-content-area flex-1 flex flex-col min-w-0 bg-[#F8FAFC] transition-all duration-300">
+        
+        <header class="bg-white border-b h-20 flex items-center justify-between px-8 shrink-0">
+            <div>
+                <h1 class="text-xl font-black text-slate-800 tracking-tight uppercase">Department Management</h1>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Categorize your Inventory Asset</p>
+            </div>
+            <button onclick="toggleModal('categoryModal')" class="bg-indigo-600 hover:bg-black text-white px-6 py-3 rounded-2xl font-black text-sm shadow-xl shadow-indigo-100 flex items-center gap-2 transition-all active:scale-95">
+                <i data-lucide="plus-circle" class="w-5 h-5"></i> <span class="hidden sm:inline">CREATE NEW CATEGORY</span>
+            </button>
+        </header>
 
-    <main class="p-8 overflow-y-auto flex-1 custom-scrollbar">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            
-            <div class="bg-white p-6 rounded-[2.5rem] border border-slate-200 shadow-sm hover:border-indigo-500 hover:shadow-xl hover:shadow-indigo-50/50 transition-all group relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-orange-500/5 rounded-full -mr-8 -mt-8"></div>
-                
-                <div class="flex justify-between items-start mb-6 relative z-10">
-                    <div class="bg-orange-100 p-4 rounded-2xl text-orange-600 shadow-inner">
-                        <i data-lucide="apple" class="w-8 h-8"></i>
-                    </div>
-                    <div class="flex gap-1">
-                        <button onclick="toggleModal('categoryModal')" class="p-2 text-slate-300 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                        <button class="p-2 text-slate-300 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    </div>
-                </div>
-                
-                <h3 class="text-xl font-black text-slate-800 tracking-tight">Fresh Produce</h3>
-                <p class="text-slate-500 text-xs font-medium mt-1 leading-relaxed">Fruits, Vegetables & Farm Herbs</p>
-                
-                <div class="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between">
+        <main class="p-8 overflow-y-auto flex-1 custom-scrollbar">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center gap-4 shadow-sm">
+                    <div class="bg-indigo-50 p-3 rounded-xl text-indigo-600"><i data-lucide="layers" class="w-5 h-5"></i></div>
                     <div>
-                        <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Stock Count</p>
-                        <span class="text-sm font-black text-slate-700">42 Products</span>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">Total Departments</p>
+                        <p class="text-lg font-black text-slate-800">12</p>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white p-6 rounded-[2.5rem] border border-slate-200 shadow-sm hover:border-indigo-500 hover:shadow-xl transition-all group relative overflow-hidden">
-                <div class="flex justify-between items-start mb-6">
-                    <div class="bg-blue-100 p-4 rounded-2xl text-blue-600 shadow-inner">
-                        <i data-lucide="milk" class="w-8 h-8"></i>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                
+                <div class="bg-white p-6 rounded-[2.5rem] border border-slate-200 shadow-sm hover:border-indigo-500 hover:shadow-xl hover:shadow-indigo-50/50 transition-all group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-orange-500/5 rounded-full -mr-8 -mt-8"></div>
+                    
+                    <div class="flex justify-between items-start mb-6 relative z-10">
+                        <div class="bg-orange-100 p-4 rounded-2xl text-orange-600 shadow-inner">
+                            <i data-lucide="apple" class="w-8 h-8"></i>
+                        </div>
+                        <div class="flex gap-1">
+                            <button onclick="toggleModal('categoryModal')" class="p-2 text-slate-300 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                            <button class="p-2 text-slate-300 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
                     </div>
-                    <div class="flex gap-1">
-                        <button onclick="toggleModal('categoryModal')" class="p-2 text-slate-300 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                        <button class="p-2 text-slate-300 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    
+                    <h3 class="text-xl font-black text-slate-800 tracking-tight">Fresh Produce</h3>
+                    <p class="text-slate-500 text-xs font-medium mt-1 leading-relaxed">Fruits, Vegetables & Farm Herbs</p>
+                    
+                    <div class="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between">
+                        <div>
+                            <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Stock Count</p>
+                            <span class="text-sm font-black text-slate-700">42 Products</span>
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-all"></i>
                     </div>
                 </div>
-                <h3 class="text-xl font-black text-slate-800 tracking-tight">Dairy & Eggs</h3>
-                <p class="text-slate-500 text-xs font-medium mt-1 leading-relaxed">Milk, Cheese, Butter & Poultry</p>
-                <div class="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between">
-                    <div><p class="text-[10px] font-black text-slate-400 uppercase mb-1">Stock Count</p><span class="text-sm font-black text-slate-700">18 Products</span></div>
-                </div>
-            </div>
 
-        </div>
-    </main>
+                <div class="bg-white p-6 rounded-[2.5rem] border border-slate-200 shadow-sm hover:border-indigo-500 hover:shadow-xl transition-all group relative overflow-hidden">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="bg-blue-100 p-4 rounded-2xl text-blue-600 shadow-inner">
+                            <i data-lucide="milk" class="w-8 h-8"></i>
+                        </div>
+                        <div class="flex gap-1">
+                            <button onclick="toggleModal('categoryModal')" class="p-2 text-slate-300 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                            <button class="p-2 text-slate-300 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-800 tracking-tight">Dairy & Eggs</h3>
+                    <p class="text-slate-500 text-xs font-medium mt-1 leading-relaxed">Milk, Cheese, Butter & Poultry</p>
+                    <div class="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between">
+                        <div><p class="text-[10px] font-black text-slate-400 uppercase mb-1">Stock Count</p><span class="text-sm font-black text-slate-700">18 Products</span></div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-all"></i>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
 </div>
 
-<div id="categoryModal" class="fixed inset-0 z-[100] hidden items-center flex justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+<div id="categoryModal" class="fixed inset-0 z-[110] hidden items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
     <div class="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300 border border-slate-200">
         <div class="p-6 border-b flex justify-between items-center bg-slate-50/50">
             <div>

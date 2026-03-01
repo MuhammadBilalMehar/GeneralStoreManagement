@@ -5,119 +5,173 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customers | NexStore</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Smooth transition for the modal */
-        .modal-overlay {
-            transition: opacity 0.3s ease;
+        body { font-family: 'Inter', sans-serif; }
+
+        /* --- SIDEBAR LAYOUT LOGIC --- */
+        #sidebar {
+            z-index: 100;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
         }
-        .modal-content {
-            transition: transform 0.3s ease, opacity 0.3s ease;
+        #sidebar.open { transform: translateX(0) !important; }
+
+        @media (min-width: 768px) {
+            #sidebar {
+                transform: translateX(0) !important;
+                position: fixed;
+            }
+            .main-wrapper {
+                margin-left: 16rem; 
+                width: calc(100% - 16rem);
+            }
+            .mobile-menu-btn { display: none !important; }
         }
-        .hidden-modal {
-            display: none !important;
-        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans">
+<body class="bg-[#F8FAFC] text-slate-900 overflow-x-hidden">
 
 <div class="flex h-screen overflow-hidden">
 
+    <button onclick="toggleSidebar()" class="mobile-menu-btn md:hidden fixed top-3 left-4 z-[70] bg-[#0F172A] border border-slate-800 text-white p-2 rounded-xl shadow-xl">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+    </button>
+
     <div id="sidebar-container"></div>
 
-    <div class="flex-1 flex flex-col overflow-hidden">
-        <header class="bg-white border-b h-16 flex items-center justify-between px-8">
-            <h2 class="font-bold text-lg text-slate-800">Customer Directory</h2>
+    <div id="sidebarOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[45] hidden transition-opacity duration-300 opacity-0"></div>
+
+    <div class="main-wrapper flex-1 flex flex-col min-w-0 transition-all duration-300">
+        <header class="bg-white border-b border-slate-200 h-20 flex items-center justify-between px-8 shrink-0">
+            <div>
+                <h1 class="text-xl font-black text-slate-800 tracking-tight uppercase">Customer Directory</h1>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Manage Consumer Accounts</p>
+            </div>
             <div class="flex gap-4">
-                <input type="text" placeholder="Search phone or name..." class="bg-slate-100 border-none rounded-xl px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
-                <button onclick="toggleModal('customerModal')" class="bg-indigo-600 hover:bg-indigo-700 transition-colors text-white px-5 py-2 rounded-xl font-bold flex items-center gap-2">
-                    <i data-lucide="user-plus" class="w-5 h-5"></i> Add New
+                <div class="relative hidden sm:block">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" placeholder="Search customer..." class="bg-slate-50 border border-slate-200 rounded-2xl pl-10 pr-4 py-2.5 text-xs font-bold outline-none focus:ring-2 focus:ring-indigo-500/10">
+                </div>
+                <button onclick="toggleModal('customerModal')" class="bg-indigo-600 hover:bg-black text-white px-6 py-3 rounded-2xl font-black text-xs shadow-xl shadow-indigo-100 flex items-center gap-2 transition-all active:scale-95">
+                    <i data-lucide="user-plus" class="w-4 h-4"></i> <span class="hidden sm:inline">ADD CUSTOMER</span>
                 </button>
             </div>
         </header>
 
-        <main class="p-8 overflow-y-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="customerGrid">
-                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center text-center">
-                    <div class="w-20 h-20 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-2xl mb-4 border-2 border-indigo-100">
-                        AR
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-800">Ali Raza</h3>
-                    <p class="text-slate-500 text-sm">0300-1234567</p>
-                    <div class="w-full grid grid-cols-1 gap-2 mt-6">
-                        <div class="bg-red-50 p-3 rounded-2xl">
-                            <p class="text-[10px] uppercase font-bold text-red-400">Balance</p>
-                            <p class="font-bold text-red-600">Rs 2,400</p>
+        <main class="p-8 overflow-y-auto custom-scrollbar">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="customerGrid">
+                
+                <div class="bg-white p-6 rounded-[2.5rem] border border-slate-200 shadow-sm hover:border-indigo-500 hover:shadow-xl hover:shadow-indigo-50/50 transition-all group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-20 h-20 bg-indigo-500/5 rounded-full -mr-8 -mt-8"></div>
+                    
+                    <div class="flex flex-col items-center text-center relative z-10">
+                        <div class="w-20 h-20 rounded-3xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-black text-2xl mb-4 border border-indigo-100 shadow-inner group-hover:scale-110 transition-transform">
+                            AR
+                        </div>
+                        <h3 class="text-lg font-black text-slate-800 tracking-tight">Ali Raza</h3>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">ID: CUST-8821</p>
+                        
+                        <div class="flex gap-2 mb-6 w-full">
+                            <a href="tel:03001234567" class="flex-1 bg-slate-50 hover:bg-indigo-50 p-2 rounded-xl transition-colors flex justify-center text-slate-400 hover:text-indigo-600 border border-slate-100">
+                                <i data-lucide="phone" class="w-4 h-4"></i>
+                            </a>
+                            <a href="https://wa.me/923001234567" class="flex-1 bg-slate-50 hover:bg-emerald-50 p-2 rounded-xl transition-colors flex justify-center text-slate-400 hover:text-emerald-600 border border-slate-100">
+                                <i data-lucide="message-square" class="w-4 h-4"></i>
+                            </a>
+                            <button onclick="toggleModal('customerModal')" class="flex-1 bg-slate-50 hover:bg-indigo-50 p-2 rounded-xl transition-colors flex justify-center text-slate-400 hover:text-indigo-600 border border-slate-100">
+                                <i data-lucide="edit-3" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+
+                        <div class="w-full space-y-2">
+                            <div class="bg-rose-50 p-3 rounded-2xl flex justify-between items-center border border-rose-100">
+                                <p class="text-[9px] uppercase font-black text-rose-400">Balance Due</p>
+                                <p class="font-black text-rose-600 text-sm">Rs 2,400</p>
+                            </div>
+                            <div class="bg-emerald-50 p-3 rounded-2xl flex justify-between items-center border border-emerald-100">
+                                <p class="text-[9px] uppercase font-black text-emerald-400">Loyalty Points</p>
+                                <p class="font-black text-emerald-600 text-sm">450 Pts</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col items-center text-center">
-                    <div class="w-20 h-20 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-2xl mb-4 border-2 border-indigo-100">
+
+                <div class="bg-white p-6 rounded-[2.5rem] border border-slate-200 shadow-sm hover:border-indigo-500 hover:shadow-xl transition-all group relative overflow-hidden text-center">
+                    <div class="w-20 h-20 rounded-3xl bg-indigo-50 flex items-center justify-center text-indigo-600 font-black text-2xl mx-auto mb-4 border border-indigo-100">
                         BM
                     </div>
-                    <h3 class="text-xl font-bold text-slate-800">Bilal Mehar</h3>
-                    <p class="text-slate-500 text-sm">0300-1234567</p>
-                    <div class="w-full grid grid-cols-1 gap-2 mt-6">
-                        <div class="bg-red-50 p-3 rounded-2xl">
-                            <p class="text-[10px] uppercase font-bold text-red-400">Balance</p>
-                            <p class="font-bold text-red-600">Rs 2,400</p>
-                        </div>
+                    <h3 class="text-lg font-black text-slate-800 tracking-tight">Bilal Mehar</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">ID: CUST-8822</p>
+                    <div class="flex gap-2 mb-6">
+                        <div class="flex-1 p-2 bg-slate-50 rounded-xl text-slate-400"><i data-lucide="phone" class="w-4 h-4 mx-auto"></i></div>
+                        <div class="flex-1 p-2 bg-slate-50 rounded-xl text-slate-400"><i data-lucide="message-square" class="w-4 h-4 mx-auto"></i></div>
+                        <div class="flex-1 p-2 bg-slate-50 rounded-xl text-slate-400"><i data-lucide="edit-3" class="w-4 h-4 mx-auto"></i></div>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-2xl flex justify-between items-center border border-slate-100">
+                        <p class="text-[9px] uppercase font-black text-slate-400">Balance Due</p>
+                        <p class="font-black text-slate-800 text-sm">Rs 0.00</p>
                     </div>
                 </div>
+
             </div>
         </main>
     </div>
 </div>
 
-<div id="customerModal" class="fixed inset-0 z-[100] hidden-modal flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
-        <div class="px-8 py-6 border-b border-slate-100 flex justify-between items-center bg-white">
+<div id="customerModal" class="fixed inset-0 z-[110] hidden items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div class="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 border border-slate-200">
+        <div class="px-8 py-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
             <div>
-                <h3 class="text-xl font-bold text-slate-900">New Customer</h3>
-                <p class="text-xs text-slate-500 mt-1 uppercase font-bold tracking-widest">General Information</p>
+                <h3 class="text-lg font-black text-slate-800 tracking-tight">New Customer</h3>
+                <p class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">General Information</p>
             </div>
-            <button onclick="toggleModal('customerModal')" class="p-2 hover:bg-slate-100 rounded-full text-slate-400 transition-colors">
+            <button onclick="toggleModal('customerModal')" class="p-2 hover:bg-rose-50 rounded-xl text-slate-400 hover:text-rose-500 transition-colors">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>
 
-        <form id="addCustomerForm" class="p-8 space-y-5">
-            <div class="space-y-1.5">
-                <label class="text-[11px] font-black text-slate-500 uppercase px-1 tracking-wider">Customer ID</label>
+        <form id="addCustomerForm" class="p-8 space-y-4">
+            <div class="space-y-1">
+                <label class="text-[10px] font-black text-slate-400 uppercase ml-1">Customer ID</label>
                 <div class="relative">
-                    <i data-lucide="hash" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
-                    <input type="text" id="custId" placeholder="CUST-001" required 
-                        class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all">
+                    <i data-lucide="hash" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                    <input type="text" placeholder="CUST-001" required 
+                        class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all">
                 </div>
             </div>
 
-            <div class="space-y-1.5">
-                <label class="text-[11px] font-black text-slate-500 uppercase px-1 tracking-wider">Full Name</label>
+            <div class="space-y-1">
+                <label class="text-[10px] font-black text-slate-400 uppercase ml-1">Full Name</label>
                 <div class="relative">
-                    <i data-lucide="user" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
-                    <input type="text" id="custName" placeholder="Enter name..." required
-                        class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all">
+                    <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                    <input type="text" placeholder="Enter name..." required
+                        class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all">
                 </div>
             </div>
 
-            <div class="space-y-1.5">
-                <label class="text-[11px] font-black text-slate-500 uppercase px-1 tracking-wider">Phone Number</label>
+            <div class="space-y-1">
+                <label class="text-[10px] font-black text-slate-400 uppercase ml-1">WhatsApp / Phone</label>
                 <div class="relative">
-                    <i data-lucide="phone" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
-                    <input type="tel" id="custPhone" placeholder="03xx-xxxxxxx" required
-                        class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all">
+                    <i data-lucide="phone" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                    <input type="tel" placeholder="03xx-xxxxxxx" required
+                        class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all">
                 </div>
             </div>
 
-            <div class="flex gap-3 pt-4">
-                <button type="button" onclick="toggleModal('customerModal')" class="flex-1 px-6 py-3 border border-slate-200 text-slate-600 font-bold rounded-2xl hover:bg-slate-50 transition-colors">Cancel</button>
-                <button type="submit" class="flex-1 px-6 py-3 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all">Add Customer</button>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button type="button" onclick="toggleModal('customerModal')" class="py-3.5 text-slate-400 font-bold text-[10px] uppercase tracking-widest hover:text-slate-600">Cancel</button>
+                <button type="submit" class="bg-indigo-600 text-white font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-black shadow-xl shadow-indigo-100 transition-all active:scale-95">
+                    Save Record
+                </button>
             </div>
         </form>
     </div>
 </div>
-
 
 <script src="main.js"></script>
 
